@@ -1,77 +1,73 @@
-# Contact manager application
-def display_menu():
-    print("\nWelcome to Contact Manager")
-    print("1. Add Contact")
-    print("2. View Contacts")
-    print("3. Search Contact")
-    print("4. Update Contact")
-    print("5. Delete Contact")
-    print("6. Exit")
+contacts = []
 
-def add_contact(contacts):
-    name = input("Enter Name: ")
-    for contact in contacts:
-        if contact[0] == name:
-            print("Contact with this name already exists!")
-            return
-    phone = input("Enter Phone Number: ")
-    email = input("Enter Email: ")
-    contacts.append((name, phone, email))
+def add_contact(name, email, phone):
+    contacts.append((name, email, phone))
     print("Contact added successfully!")
+    print("\n------------------------------------------------")
 
-def view_contacts(contacts):
+
+def view_contacts():
     if not contacts:
-        print("No contacts available.")
-    else:
-        print("\nList of Contacts:")
-        for name, phone, email in contacts:
-            print(f"{name} - {phone} - {email}")
+        print("No contact found.")
+        print("\n------------------------------------------------")
 
-def search_contact(contacts):
-    name = input("Enter name to search: ")
+    else:
+        print("\nList Of contacts")
+        print("------------------------------------------------")
+        for name, email, phone in contacts:
+            print(f"Name: {name}, Email: {email}, Phone: {phone}")
+            print("\n------------------------------------------------")
+
+
+def search_contact(name):
     for contact in contacts:
-        if contact[0] == name:
-            print(f"Contact Found: {contact[0]} - {contact[1]} - {contact[2]}")
-            return
-    print("Contact not found!")
+        if contact[0].lower() == name.lower():
+            print(f"Name: {contact[0]}, Email: {contact[1]}, Phone: {contact[2]}")
+            print("\n------------------------------------------------")
 
-def update_contact(contacts):
-    name = input("Enter name to update: ")
+            return
+    print("Contact not found.")
+    print("\n------------------------------------------------")
+
+
+def update_phone(name, new_phone):
     for i, contact in enumerate(contacts):
-        if contact[0] == name:
-            new_phone = input("Enter new phone number: ")
-            contacts[i] = (contact[0], new_phone, contact[2])
-            print("Contact updated successfully!")
+        if contact[0].lower() == name.lower():
+            contacts[i] = (contact[0], contact[1], new_phone)
+            print("Phone number updated successfully!")
+            print("\n------------------------------------------------")
             return
-    print("Contact not found!")
+    print("\nContact not found.")
+    print("\n------------------------------------------------")
 
-def delete_contact(contacts):
-    name = input("Enter name to delete: ")
-    new_contacts = [contact for contact in contacts if contact[0] != name]
-    if len(new_contacts) == len(contacts):
-        print("Contact not found!")
+
+
+def delete_contact(name):
+    global contacts
+    if not contacts:
+        print("There is no data for delete.")
+        print("\n------------------------------------------------")
+        return
+    contacts = [contact for contact in contacts if contact[0].lower() != name.lower()]
+    print("Contact deleted successfully!")
+    print("\n------------------------------------------------")
+
+
+while True:
+    print("\nWelcome to Contact Manager")
+    choice = input("\n1. Add\n2. View\n3. Search\n4. Update\n5. Delete\n6. Exit\n\nEnter your choice: ")
+    if choice == "1":
+        add_contact(input("Name: "), input("Email: "), input("Phone: "))
+    elif choice == "2":
+        view_contacts()
+    elif choice == "3":
+        search_contact(input("Name: "))
+    elif choice == "4":
+        update_phone(input("Name: "), input("New Phone: "))
+    elif choice == "5":
+        delete_contact(input("Name: "))
+    elif choice == "6":
+        print("Exiting Contact Manager. Goodbye!")
+        break
     else:
-        contacts.clear()
-        contacts.extend(new_contacts)
-        print("Contact deleted successfully!")
-
-def main():
-    contacts = []
-    while True:
-        display_menu()
-        choice = input("Enter your choice: ")
-        if choice == "1":
-            add_contact(contacts)
-        elif choice == "2":
-            view_contacts(contacts)
-        elif choice == "3":
-            search_contact(contacts)
-        elif choice == "4":
-            update_contact(contacts)
-        elif choice == "5":
-            delete_contact(contacts)
-        elif choice == "6":
-            print("Exiting Contact Manager. Goodbye!")
-            break
-        else:
-            print("Invalid choice. Please try again!")
+        print("Invalid choice!")
